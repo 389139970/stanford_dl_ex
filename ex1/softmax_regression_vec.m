@@ -20,6 +20,35 @@ function [f,g] = softmax_regression(theta, X,y)
   % initialize objective value and gradient.
   f = 0;
   g = zeros(size(theta));
+  
+  
+%   for i = 1: m
+%       thetaX = sum(bsxfun(@times, theta, X(:,i)),1);
+%       thetaX = [thetaX, 0];%attention theta is 9 not 10, so default_theta = 0
+%       ex_thetaX = exp(thetaX);
+%       dome = sum(ex_thetaX); 
+%       f =  f + ex_thetaX(y(i))/dome;
+%       indicator = zeros(9,1);
+%       indicator(y(i)) = 1;
+%       temp = indicator - ex_thetaX;
+%       g =  g - bsxfun(@times, X(:,i), )
+%   end
+A = zeros(num_classes,m);
+y1 = sub2ind(size(A), y, 1:size(A,2));
+A(y1) = 1;
+  
+h = exp(theta'*X);
+h = [h;ones(1,m)];
+s = sum(h,1);
+for i = 1:m
+    h(:,i) = h(:,i)/s(i); % Obtain hypothesis 
+end
+   
+f = -sum(sum(A.*log(h)));
+
+g = - X*(A-h)';
+
+g(:,end) = [];
 
   %
   % TODO:  Compute the softmax objective function and gradient using vectorized code.
